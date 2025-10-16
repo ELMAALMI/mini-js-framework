@@ -13,6 +13,27 @@ JS Framework is a mini framework that combines the best features of modern JavaS
 - **Event Directives**: Declarative event handling with `@click`, `@input`, etc.
 - **Nested Components**: Automatic mounting of child components
 
+## Getting Started
+
+### Running the Development Server
+
+This framework requires a web server to run (due to ES6 module imports). Use the included Node.js development server:
+
+```bash
+# Start the server
+node server.js
+```
+
+Then open your browser to:
+
+```
+http://localhost:3000
+```
+
+### Alternative: Using VS Code Live Server
+
+Install the "Live Server" extension in VS Code and click "Go Live" in the bottom right corner.
+
 ## How It Works
 
 ### 1. **Reactivity System**
