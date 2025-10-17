@@ -1,18 +1,5 @@
 # JS Framework
 
-A lightweight, reactive JavaScript framework for building single-page applications with minimal overhead. JS Framework provides a simple yet powerful way to create component-based web applications with reactivity, routing, and template binding.
-
-## Overview
-
-JS Framework is a mini framework that combines the best features of modern JavaScript frameworks into a compact, easy-to-use package. It offers:
-
-- **Reactive State Management**: Automatic UI updates when state changes using JavaScript Proxies
-- **Component-Based Architecture**: Reusable components with lifecycle hooks and props
-- **Hash-Based Routing**: Simple SPA navigation without server configuration
-- **Template Binding**: External HTML templates with data binding syntax
-- **Event Directives**: Declarative event handling with `@click`, `@input`, etc.
-- **Nested Components**: Automatic mounting of child components
-
 ## Getting Started
 
 ### Running the Development Server
