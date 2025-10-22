@@ -1,133 +1,374 @@
-# JS Framework
+# 🎯 Student Project Plan: Building a JavaScript Framework
 
-A lightweight, reactive JavaScript framework for building single-page applications with minimal overhead. JS Framework provides a simple yet powerful way to create component-based web applications with reactivity, routing, and template binding.
+## 📋 **Project Overview**
 
-## Overview
+**Goal**: Build a lightweight JavaScript framework (like Vue/React) from scratch
+**Name**: ESTMJS (Easy State Management JS)
+**Timeline**: 2-3 weeks
+**Level**: Intermediate JavaScript
 
-JS Framework is a mini framework that combines the best features of modern JavaScript frameworks into a compact, easy-to-use package. It offers:
+---
 
-- **Reactive State Management**: Automatic UI updates when state changes using JavaScript Proxies
-- **Component-Based Architecture**: Reusable components with lifecycle hooks and props
-- **Hash-Based Routing**: Simple SPA navigation without server configuration
-- **Template Binding**: External HTML templates with data binding syntax
-- **Event Directives**: Declarative event handling with `@click`, `@input`, etc.
-- **Nested Components**: Automatic mounting of child components
+## 📚 **Phase 1: Foundation & Planning (Day 1-2)**
 
-## Getting Started
+### **Step 1: Understand the Problem**
 
-### Running the Development Server
+- [ ] Research existing frameworks (Vue, React, Angular)
+- [ ] Identify key features we want to implement:
+  - Component system
+  - Reactive state management
+  - Router
+  - Event bus
+  - Template rendering
 
-This framework requires a web server to run (due to ES6 module imports). Use the included Node.js development server:
-
-```bash
-# Start the server
-node server.js
-```
-
-Then open your browser to:
+### **Step 2: Project Structure Setup**
 
 ```
-http://localhost:3000
+estmjs-project/
+├── index.html
+├── src/
+│   ├── main.js          # Entry point
+│   └── pages/
+│       ├── home.page.js
+│       └── about.page.js
+├── lib/                 # Framework code
+│   ├── index.js         # Main exports
+│   ├── component.js     # Component system
+│   ├── router.js        # Routing
+│   ├── reactive.js      # Reactive state
+│   ├── evt-bus.js       # Event system
+│   └── estmfm.js        # App creator
+└── docs/               # Documentation
 ```
 
-### Alternative: Using VS Code Live Server
+### **Step 3: Learning Objectives**
 
-Install the "Live Server" extension in VS Code and click "Go Live" in the bottom right corner.
+- [ ] Understand JavaScript Classes and Prototypes
+- [ ] Learn about Proxy objects for reactivity
+- [ ] Study Event-driven architecture
+- [ ] Understand Hash-based routing
 
-## How It Works
+---
 
-### 1. **Reactivity System**
+## 🔨 **Phase 2: Core Framework (Day 3-8)**
 
-The framework uses JavaScript Proxies to create reactive state objects. When any property changes, the component automatically re-renders:
+### **Step 4: Reactive System (Day 3)**
+
+**File**: `reactive.js`
 
 ```javascript
+// Learning: Proxy objects, getters/setters
 export function reactive(obj, onChange) {
   return new Proxy(obj, {
     set(target, key, value) {
       target[key] = value;
-      onChange(); // Triggers re-render
+      onChange(key, value); // Trigger updates
       return true;
     },
   });
 }
 ```
 
-### 2. **Component System**
+**Tasks**:
 
-Components extend the base `Component` class and can load external HTML templates. They manage their own state and lifecycle:
+- [ ] Create reactive wrapper function
+- [ ] Test with simple object
+- [ ] Implement nested object reactivity
+
+### **Step 5: Event Bus (Day 4)**
+
+**File**: `evt-bus.js`
 
 ```javascript
-export class Counter extends Component {
-  constructor(root) {
-    super(root, { count: 0 }, "./src/pages/counter.page.html");
+// Learning: Observer pattern, Map data structure
+export class EventBus {
+  constructor() {
+    this.listeners = new Map();
   }
 
-  increment() {
-    this.state.count++; // Automatically updates UI
+  on(event, callback) {
+    // Add event listener
+  }
+
+  emit(event, data) {
+    // Trigger all listeners
   }
 }
 ```
 
-### 3. **Template Binding**
+**Tasks**:
 
-Templates support several binding syntaxes:
+- [ ] Implement basic event system
+- [ ] Add unsubscribe functionality
+- [ ] Test with multiple events
 
-- **Interpolation**: `{{variableName}}` - Displays state values
-- **Event Binding**: `@click="methodName"` - Binds event handlers
-- **Style Binding**: `:style="expression"` - Dynamic styles
-- **Component Mounting**: `<div data-component="ComponentName"></div>` - Nested components
+### **Step 6: Component Base Class (Day 5-6)**
 
-Example template:
-
-```html
-<div>
-  <h1>Count: {{count}}</h1>
-  <button @click="increment">+</button>
-  <button @click="decrement">-</button>
-</div>
-```
-
-### 4. **Routing**
-
-The Router class manages navigation using hash-based URLs:
+**File**: `component.js`
 
 ```javascript
+export class Component {
+  constructor(root, state, components, eventBus) {
+    this.root = root;
+    this.state = reactive(state, () => this.update());
+    this.update(); // Initial render
+  }
+
+  template(state) {
+    return "<div>Override me!</div>";
+  }
+
+  update() {
+    this.root.innerHTML = this.template(this.state);
+  }
+}
+```
+
+**Tasks**:
+
+- [ ] Create base Component class
+- [ ] Implement template rendering
+- [ ] Add basic lifecycle hooks (mounted, unmounted)
+
+### **Step 7: Router System (Day 7)**
+
+**File**: `router.js`
+
+```javascript
+export class Router {
+  constructor(routes) {
+    this.routes = routes;
+  }
+
+  mountTo(root) {
+    this.root = root;
+    window.addEventListener("hashchange", () => this.load());
+    this.load();
+  }
+}
+```
+
+**Tasks**:
+
+- [ ] Implement hash-based routing
+- [ ] Handle route parameters
+- [ ] Add 404 handling
+
+### **Step 8: App Creator (Day 8)**
+
+**File**: `estmfm.js`
+
+```javascript
+export function createApp({ router, mount }) {
+  const rootEl = document.querySelector(mount);
+  const eventBus = new EventBus();
+  router.mountTo(rootEl, eventBus);
+  return { eventBus };
+}
+```
+
+**Tasks**:
+
+- [ ] Create app initialization function
+- [ ] Wire up router and event system
+- [ ] Export framework modules
+
+---
+
+## 🎨 **Phase 3: Advanced Features (Day 9-12)**
+
+### **Step 9: Template Syntax (Day 9)**
+
+**Features to add**:
+
+- [ ] `{{ mustache }}` expressions
+- [ ] `v-if` and `v-show` directives
+- [ ] `@click` event handlers
+- [ ] `data-model` two-way binding
+
+### **Step 10: Computed Properties (Day 10)**
+
+```javascript
+// In component.js
+setupComputed() {
+  // Create computed properties that auto-update
+}
+```
+
+### **Step 11: Child Components (Day 11)**
+
+```javascript
+// Component nesting
+mountChildComponents() {
+  // Find and mount child components
+}
+```
+
+### **Step 12: Error Handling (Day 12)**
+
+- [ ] Add try-catch blocks
+- [ ] User-friendly error messages
+- [ ] Debug mode
+
+---
+
+## 🚀 **Phase 4: Building the App (Day 13-15)**
+
+### **Step 13: Create Demo Pages**
+
+**File**: `src/pages/home.page.js`
+
+```javascript
+export class HomeComponent extends Component {
+  constructor(root, props, components, eventBus) {
+    super(
+      root,
+      {
+        title: "Home",
+        count: 0,
+      },
+      components,
+      eventBus
+    );
+  }
+
+  template(state) {
+    return `
+      <div>
+        <h1>{{title}}</h1>
+        <p>Count: {{count}}</p>
+        <button @click="increment">+1</button>
+      </div>
+    `;
+  }
+
+  increment() {
+    this.state.count++;
+  }
+}
+```
+
+### **Step 14: Main App File**
+
+**File**: `src/main.js`
+
+```javascript
+import { createApp, Router } from "../lib/index.js";
+import { HomeComponent } from "./pages/home.page.js";
+
 const router = new Router({
-  "/": Home,
-  "/counter": Counter,
+  "/": HomeComponent,
+  "/about": AboutComponent,
 });
 
-createApp({
+const app = createApp({
   router,
   mount: "#app",
 });
 ```
 
-When the hash changes (e.g., `#/counter`), the router automatically loads the corresponding component.
+### **Step 15: HTML Entry Point**
 
-### 5. **Application Lifecycle**
+**File**: `index.html`
 
-1. **Initialization**: `createApp()` sets up the router and mounts the app
-2. **Route Loading**: Router detects hash changes and loads the matching component
-3. **Component Creation**: Component constructor initializes state and loads template
-4. **Template Rendering**: HTML is fetched, interpolated with state values, and rendered
-5. **Event Binding**: Event listeners are attached based on `@` directives
-6. **Child Mounting**: Nested components are discovered and instantiated
-7. **Reactivity**: State changes trigger automatic re-renders
-
-## Core Architecture
-
-```
-estmfm.js     → App initialization and mounting
-router.js     → Hash-based routing system
-component.js  → Component base class with lifecycle
-reactive.js   → Proxy-based reactivity system
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My ESTMJS App</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="src/main.js"></script>
+  </body>
+</html>
 ```
 
-## Key Features
+---
 
-- **Zero Dependencies**: Pure JavaScript, no external libraries required
-- **Lightweight**: Minimal codebase, easy to understand and modify
-- **Modern Syntax**: ES6+ features with module imports
-- **Flexible**: Can be extended with custom functionality
-- **Declarative**: Template-based UI definition with automatic updates
+## 🧪 **Phase 5: Testing & Debugging (Day 16-17)**
+
+### **Step 16: Manual Testing**
+
+- [ ] Test routing between pages
+- [ ] Verify state reactivity
+- [ ] Check event system
+- [ ] Test component lifecycle
+
+### **Step 17: Bug Fixing**
+
+- [ ] Fix any console errors
+- [ ] Improve error messages
+- [ ] Add console logs for debugging
+
+---
+
+## 📖 **Phase 6: Documentation & Polish (Day 18-19)**
+
+### **Step 18: Write Documentation**
+
+- [ ] API documentation
+- [ ] Usage examples
+- [ ] Setup instructions
+
+### **Step 19: Final Polish**
+
+- [ ] Code cleanup
+- [ ] Performance optimizations
+- [ ] Add comments
+
+---
+
+## 🎉 **Phase 7: Presentation (Day 20)**
+
+### **Step 20: Showcase Project**
+
+- [ ] Demo the working application
+- [ ] Explain the architecture
+- [ ] Discuss challenges and solutions
+- [ ] Future enhancements
+
+---
+
+## 🛠 **Tools & Technologies**
+
+- **Language**: Vanilla JavaScript (ES6+)
+- **Modules**: ES6 Modules
+- **Server**: Live Server / VSCode Live Server
+- **Version Control**: Git
+- **Browser**: Modern browsers with ES6 support
+
+---
+
+## 🎯 **Learning Outcomes**
+
+By completing this project, the student will understand:
+
+✅ **JavaScript Advanced Concepts**: Classes, Proxies, Events
+✅ **Framework Architecture**: How frameworks work internally
+✅ **Reactive Programming**: State management patterns
+✅ **Component-Based Design**: Reusable UI components
+✅ **Routing Systems**: Client-side navigation
+✅ **Event Systems**: Pub/Sub patterns
+✅ **Problem Solving**: Debugging complex systems
+
+---
+
+## 📝 **Assessment Criteria**
+
+- **Code Quality** (30%): Clean, readable, well-commented
+- **Functionality** (40%): All features work correctly
+- **Architecture** (20%): Good separation of concerns
+- **Documentation** (10%): Clear setup and usage instructions
+
+---
+
+## 🆘 **When You Get Stuck**
+
+1. **Console.log Everything**: Debug step by step
+2. **Check Browser DevTools**: Network tab, Console, Elements
+3. **Simplify**: Break down complex problems
+4. **Research**: Look at similar open-source projects
+5. **Ask for Help**: Don't stay stuck for more than 30 minutes
+
+Ready to start? Let's begin with **Phase 1, Step 1**! 🚀
